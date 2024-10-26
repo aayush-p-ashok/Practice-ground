@@ -17,10 +17,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 #Define charges and their postions
-q1 = 1
-q2 = -2
-x1,y1 = 0,0 #Position of q1
-x2,y2 = 3,0 #Position of q2
+q1 = float(input('Charge of q1= '))
+q2 = float(input('Charge of q2= '))
+x1,y1 = map(float,input('Enter the position of q1(x1,y1) : ').split(',')) #Position of q1
+x2,y2 = map(float,input('Enter the position of q2(x2,y2) : ').split(',')) #Position of q2
 
 #Defining function of potential
 def potential(q,x,y,x0,y0):
@@ -45,11 +45,21 @@ ax = fig.add_subplot(111, projection='3d')
 plt.subplots_adjust(left=0, right=1, bottom=0, top=1)
 
 # Plot the surface with colormap 'viridis'
-surf = ax.plot_surface(x, y, Vnet, cmap='viridis', edgecolor='none',
+surf = ax.plot_surface(x, y, Vnet, cmap='magma', edgecolor='none',
                        antialiased=True,  # Smooth edges
                       rcount=100,        # Resampling for smoother look
                       ccount=100,        # Resampling for smoother look
                       alpha=0.9)
+
+#Add a zero potential contour
+#Calculating z-cordinate for zero potential
+zero_levels = ax.contour(x,y,Vnet,levels=[0],
+                         colors='green',linewidths=2,
+                         zdir='z',offset=Vnet.min())
+
+# Plot the actual 3D contour where potential is zero
+ax.contour3D(x, y, Vnet, levels=[0],
+             colors='#00FFFF', linewidths=2)
 
 # Add a color bar with adjusted position
 cbar = fig.colorbar(surf, ax=ax, shrink=0.7, aspect=10, pad=0.1, label='Potential V')
@@ -61,7 +71,7 @@ ax.set_zlabel('Potential V', labelpad=10)
 ax.set_title('3D Potential Due to Two Charges', pad=20, y=1.05)
 
 # Adjust the viewing angle and distance
-ax.view_init(elev=25, azim=45)  # Adjust viewing angle
+ax.view_init(elev=0, azim=90)  # Adjust viewing angle(polar and azimuthal angles)
 ax.dist = 8  # Adjust camera distance (lower number = closer)
 
 # Make axis limits slightly larger than data range
@@ -71,6 +81,5 @@ ax.set_box_aspect([1,1,0.8])  # Adjust the box aspect ratio
 ax.set_xlim(-6, 6)
 ax.set_ylim(-6, 6)
 #ax.set_zlim(Vnet.min(), Vnet.max())
-
 
 plt.show()

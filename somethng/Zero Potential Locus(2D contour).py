@@ -15,16 +15,19 @@ Use a suitable range for x and y (e.g., from -5 to 5) with sufficient resolution
 
 3. Identify and plot the locus of points where the net electric potential V_net due to both charges is zero.
 This locus represents the curve along which the potential is zero.
+
+4. Create a general program to plot the potential field around any two charges and the zero potential locus.
+
 '''
 
 import numpy as np
 import matplotlib.pyplot as plt
 
 #Define charges and their postions
-q1 = 1
-q2 = -2
-x1,y1 = 0,0 #Position of q1
-x2,y2 = 3,0 #Position of q2
+q1 = float(input('Charge of q1= '))
+q2 = float(input('Charge of q2= '))
+x1,y1 = map(float,input('Enter the position of q1(x1,y1) : ').split(',')) #Position of q1
+x2,y2 = map(float,input('Enter the position of q2(x2,y2) : ').split(',')) #Position of q2
 
 #Defining function of potential
 def potential(q,x,y,x0,y0):
@@ -42,16 +45,16 @@ V2 = potential(q2,x,y,x2,y2)
 Vnet = V1 + V2
 
 #Plotting the charges and potential contours
-plt.contourf(x, y, Vnet, levels=200)
+plt.contourf(x, y, Vnet, levels=200, cmap='magma')
 plt.colorbar(label='Potential $V$')
-plt.scatter([x1,x2],[y1,y2],s=10,color=['blue','red'])
+plt.scatter([x1,x2],[y1,y2],s=10,color=['blue','green'])
 
 #Plotting zero potential locus
 zeroline = plt.contour(x, y, Vnet, levels=[0], colors='maroon', linestyles='--', linewidths=2)
 
 #Now creating some fake ones to put in the legend(They won't appear in plot because they have no coordinates)
 q1proxy = plt.Line2D([],[],color='blue', marker='o',linestyle='None', markersize=10, label=f'q1= {q1} C')
-q2proxy = plt.Line2D([],[],color='red', marker='o',linestyle='None', markersize=10, label=f'q2= {q2}C' )
+q2proxy = plt.Line2D([],[],color='green', marker='o',linestyle='None', markersize=10, label=f'q2= {q2}C' )
 zero_line_proxy = plt.Line2D([], [], color='maroon', linestyle='--', linewidth=2, label='Zero Potential Locus')
 
 plt.legend(handles=[q1proxy,q2proxy,zero_line_proxy])
