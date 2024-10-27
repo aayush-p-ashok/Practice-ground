@@ -24,8 +24,8 @@ while ex=='y':
         return k * q / r
 
     # Creating 2D grid
-    X = np.linspace(-5, 5, 100)
-    Y = np.linspace(-5, 5, 100)
+    X = np.linspace(-5, 5, 500)
+    Y = np.linspace(-5, 5, 500)
     x, y = np.meshgrid(X, Y)
 
     Xm = np.zeros(n)
@@ -40,6 +40,8 @@ while ex=='y':
     for m in range(n):
         Vnet += potential(q,x,y,Xm[m],Ym[m])
 
+    epsilon = 1e-7  # small number to prevent log(0)
+    Vplot = np.sign(Vnet) * np.log10(np.abs(Vnet) + epsilon)
 
     # Plot 3D
     plt.rcParams['figure.figsize'] = [15, 12]  # Increased figure size
@@ -49,28 +51,28 @@ while ex=='y':
     plt.subplots_adjust(left=0, right=1, bottom=0, top=1)
 
     # Plot the surface with colormap 'viridis'
-    surf = ax.plot_surface(x, y, Vnet, cmap='magma', edgecolor='none',
+    surf = ax.plot_surface(x, y, Vplot, cmap='magma', edgecolor='none',
                            antialiased=True,  # Smooth edges
                            rcount=100,  # Resampling for smoother look
                            ccount=100,  # Resampling for smoother look
                            alpha=0.9)
 
     # Add a zero potential contour
-    zero_levels = ax.contour(x, y, Vnet, levels=[0],
+    zero_levels = ax.contour(x, y, Vplot, levels=[0],
                              colors='green', linewidths=2,
                              zdir='z', offset=Vnet.min())  # Projection of zero potential line onto x-y plane
 
     # Plot the actual 3D contour where potential is zero
-    ax.contour3D(x, y, Vnet, levels=[0],
+    ax.contour3D(x, y, Vplot, levels=[0],
                  colors='#00FFFF', linewidths=2)
 
     # Add a color bar with adjusted position
-    cbar = fig.colorbar(surf, ax=ax, shrink=0.7, aspect=10, pad=0.1, label='Potential V')
+    cbar = fig.colorbar(surf, ax=ax, shrink=0.7, aspect=10, pad=0.1, label=r'$\log(V)$')
 
     # Set labels with adjusted padding
     ax.set_xlabel('x', labelpad=10)
     ax.set_ylabel('y', labelpad=10)
-    ax.set_zlabel('Potential V', labelpad=10)
+    ax.set_zlabel(r'$\log(V)$', labelpad=10)
     ax.set_title('3D Potential Due to Two Charges', pad=20, y=1.05)
 
     # Adjust the viewing angle and distance
